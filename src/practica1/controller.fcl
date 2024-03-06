@@ -1,0 +1,147 @@
+FUNCTION_BLOCK aceleracion
+
+VAR_INPUT
+    s0 : REAL;
+    s1 : REAL;
+    s2 : REAL;  
+    s3 : REAL;
+    s4 : REAL;
+    s5 : REAL; 
+    s6 : REAL;
+    s7 : REAL;
+    s8 : REAL;
+    sig : REAL;
+END_VAR
+
+VAR_OUTPUT
+    vel : REAL;
+    rot : REAL;
+END_VAR
+
+//EJEMPLO de definición NO VINCULANTE. Hacer lo mismo para los 7 sensores restantes
+FUZZIFY sig
+    TERM izqm   :=    (-10,0) (0,0) (10,1);
+    TERM izq    :=    (-10,0)(-5,0) (0,1) (5,1) (10,0);
+    TERM izqp    :=    (-7,0)(-3,0) (0,1) (3,1) (7,0);
+    TERM cen    :=    (-10,0) (-5,0) (-2.5,1) (2.5,1) (5,0);
+    TERM derp    :=    (-8,0) (-3,1) (1,1) (3,0) (6,0);
+    TERM der    :=    (-10,0) (-5,1) (0,1) (5,0) (10,0);
+    TERM derm   :=    (-10,1) (0,0) (10,0);
+    TERM dermm   :=    (-12,1) (-6,0) (6,0);
+END_FUZZIFY
+FUZZIFY s0
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1,1) (1.5,1);
+END_FUZZIFY
+FUZZIFY s1
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+FUZZIFY s2
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+FUZZIFY s3
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+    TERM vnear    := (0.4,0.4) (0.442,0.442) (0.5,0.5);
+END_FUZZIFY
+FUZZIFY s4
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+FUZZIFY s5
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+FUZZIFY s6
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+FUZZIFY s7
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+FUZZIFY s8
+    TERM near   := (0,1) (0.5,0.5) (1,0.25) (1.5,0);
+    TERM med    := (0.25,0) (0.75,1) (1.25,0) (1.5,0);
+    TERM far    := (0,0) (1.5,1);
+END_FUZZIFY
+//EJEMPLO de definición NO VINCULANTE
+DEFUZZIFY vel
+    TERM fast   := (0,0) (2.5,1);
+    TERM med    := (0,0) (1,1) (2.5,0);
+    TERM slow   := (0,1) (2.5,0);
+    TERM vslow   := (0,1) (0.4,0) (2.5,0);
+    // Use 'Center Of Gravity' defuzzification method
+    METHOD : COG;
+    // Default value is 1 (if no rule activates defuzzifier)
+    DEFAULT := 1;
+END_DEFUZZIFY
+
+//EJEMPLO de definición NO VINCULANTE
+DEFUZZIFY rot
+    TERM izqm   :=    (-10,0) (0,0) (10,1);
+    TERM izq    :=    (-10,0)(-5,0) (0,1) (5,1) (10,0);
+    TERM izqp    :=    (-7,0)(-3,0) (1,1) (3,0) (7,0);
+    TERM cen    :=    (-10,0) (-5,0) (-2.5,1) (2.5,1) (5,0);
+    TERM derp    :=    (-8,0) (-3,1) (1,1) (3,0) (6,0);
+    TERM der    :=    (-6,0) (-3,1) (0,1) (3,0) (6,0);
+    TERM derm   :=    (-6,1) (-3,0) (3,0);
+    TERM dermm   :=    (-12,1) (-6,0) (6,0);
+
+    // Use 'Center Of Gravity' defuzzification method
+    METHOD : COG;
+    // Default value is 1 (if no rule activates defuzzifier)
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+//Reglas por defecto
+//EJEMPLO de definición de reglas NO VINCULANTE
+RULEBLOCK No1
+    // Use 'min' for 'and' (also implicit use 'max'
+    // for 'or' to fulfill DeMorgan's Law)
+    AND : PROD;
+    // Use 'min' activation method
+    ACT : MIN;
+    // Use 'max' accumulation method
+    ACCU : MAX;
+
+    //s7 s6 derecha y s2 s3 izda
+    //Definir las reglas del SE; fast slow
+    // far lejos y near cerca ;;;izqm;izq,cen,der, derm
+    
+    RULE 8: IF s0 IS far OR s1 IS far OR s6 IS far THEN vel IS slow;
+    RULE 6: IF s0 IS med OR s1 IS med OR s6 IS med THEN vel IS slow;
+    RULE 7: IF s0 IS near OR s1 IS near OR s6 IS near THEN vel IS slow;
+
+
+    RULE 9: IF sig IS izqm AND s4 IS near THEN rot IS izqm;
+    RULE 5: IF sig IS izq AND s4 IS near THEN rot IS izq;
+
+    RULE 2: IF sig IS der THEN rot IS der;
+    RULE 3: IF sig IS derm THEN rot IS derm;
+    RULE 4: IF sig IS cen THEN rot IS cen;
+
+    RULE 9: IF sig IS izqm AND s4 IS near THEN rot IS izqm;
+    RULE 5: IF sig IS izq AND s4 IS near THEN rot IS izq;
+    RULE 2: IF sig IS der THEN rot IS der;
+    RULE 3: IF sig IS derm THEN rot IS derm;
+    RULE 4: IF sig IS cen THEN rot IS cen;
+
+
+    RULE 10: IF s4 IS far AND s0 is near AND (s1 is near OR s2 is near) THEN rot IS derm;
+    RULE 10: IF s4 IS far AND s0 is near AND (s8 is near OR s7 is near) THEN rot IS izqm;
+
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
